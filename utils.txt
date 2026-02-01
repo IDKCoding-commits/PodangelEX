@@ -1,1 +1,1 @@
-whisper_timestamped, ffmpeg
+whisper_timestamped, ffmpeg, detoxify

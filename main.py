@@ -7,23 +7,30 @@ import functions
 from functions import *
 import ast
 
-config_dict = read_config("./config.json")
-print(type(config_dict))
+if __name__ == "__main__":
+    try:
+        config_dict = read_config("./config.json")
+    except FileNotFoundError:
+        config_menu()
+        config_dict = read_config("./config.json")
 
-print("\n\nWelcome to PodAngel CLI! \nIf you want to change some settings, use: 'PA config'\nbesides that, you can run the script with 'PA run'")
-main_input = input("\n Input: ")
-normalized_input = main_input.lower().strip()
-print(normalized_input)
+    main_loop = True
 
-#Config Menu
-if normalized_input == "pa config":
-    config_menu()
+    while main_loop == True:
+        print("\n\nWelcome to PodAngel CLI! \nIf you want to reconfigure, type (1)\nYou can run the app with (2)")
+        main_input = input("\n Input: ")
+        normalized_input = main_input.lower().strip()
 
-
-elif normalized_input == "pa run":
-    json.dump
-    print("Run menu reached")
+            #Config Menu
+        if normalized_input == "1":
+                config_menu()
 
 
-elif normalized_input == "exit":
-    quit()
+        elif normalized_input == "2":
+                run_program(config_dict=config_dict)
+                print("Run menu reached")
+
+
+        elif normalized_input == "exit":
+                main_loop = False
+                quit()
