@@ -10,9 +10,11 @@ This project is a revitalization of a passion project that got me into Python. C
     Cuts rather than mutes to avoid long periods of silence
 
 To get started, just:
+
     1. run pip install -r utils.txt
     2. run main.py
     3. Complete config init
+
 Then you can put your audio files into the Input folder that should get created, and run the transcription.
 
 Side note: I do realize there are a few warnings that show up, at least on Mac. As far as I know, these warnings don't refrence anything important, and are more annoying than anything else. If there is a real issue that I failed to notice, please let me know! 
