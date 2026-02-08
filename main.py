@@ -1,11 +1,4 @@
-import whisper_timestamped
-import json
-import os 
-import threading
-import argparse
-import functions
 from functions import *
-import ast
 
 if __name__ == "__main__":
     try:
@@ -23,14 +16,14 @@ if __name__ == "__main__":
 
             #Config Menu
         if normalized_input == "1":
-                config_menu()
+            config_menu()
 
 
         elif normalized_input == "2":
-                run_program(config_dict=config_dict)
-                print("Run menu reached")
+            run_program(config_dict=config_dict)
+            print("Run menu reached")
 
 
         elif normalized_input == "exit":
-                main_loop = False
-                quit()
+            main_loop = False
+            quit()
