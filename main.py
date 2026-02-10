@@ -1,11 +1,18 @@
 from functions import *
+from pathlib import Path
 
 if __name__ == "__main__":
-    try:
-        config_dict = read_config("./config.json")
-    except FileNotFoundError:
-        config_menu()
-        config_dict = read_config("./config.json")
+    script_dir = Path(__file__).resolve().parent
+    config_path = str(script_dir / "config.json")
+    config_dict = read_config(config_path)
+    
+    if config_dict is None:
+        config_menu(script_dir)
+        config_dict = read_config(config_path)
+    
+    if config_dict is None:
+        print("Error: Could not load or create config file")
+        exit(1)
 
     main_loop = True
 
@@ -14,13 +21,13 @@ if __name__ == "__main__":
         main_input = input("\n Input: ")
         normalized_input = main_input.lower().strip()
 
-            #Config Menu
+
         if normalized_input == "1":
-            config_menu()
+            config_menu(script_dir)
 
 
         elif normalized_input == "2":
-            run_program(config_dict=config_dict)
+            run_program(config_dict=config_dict, script_dir=script_dir)
             print("Run menu reached")
 
 
