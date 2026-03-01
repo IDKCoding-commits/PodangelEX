@@ -215,7 +215,6 @@ def audio_cleaner(transcribed_file: dict, bad_words: dict, thresholds: list) -> 
                     float(word['start']),
                     float(word['end'])
                 ))
-    
 
     global detox_model
     if detox_model is None:
@@ -231,19 +230,20 @@ def audio_cleaner(transcribed_file: dict, bad_words: dict, thresholds: list) -> 
             continue
         
         ratings = detox_model.predict(cleaned_text)
-        if any([
+        toxic = any([
             ratings.get('toxicity', 0) > thresholds[0],
             ratings.get('severe_toxicity', 0) > thresholds[1],
             ratings.get('obscene', 0) > thresholds[2],
             ratings.get('threat', 0) > thresholds[5],
             ratings.get('insult', 0) > thresholds[4],
             ratings.get('identity_attack', 0) > thresholds[3],
-        ]):
+        ])
+        
+        if toxic:
             segments_to_mute.append(SegmentToMute(
                 float(segment['start']),
                 float(segment['end'])
             ))
-    
     return words_to_mute, segments_to_mute
 #Function to read from files such as .txt
 def readfromFile(testfile):
@@ -281,8 +281,6 @@ def mute_words(input_file: str, output_file: str, words_to_mute: list, segments_
         else:
             merged.append((start, end))
 
-    print(f"Merged segments to remove: {merged}")
-
     duration = get_audio_duration(input_file)
     if duration is None:
         print(f"Error: Could not process {input_file} - unable to get audio duration")
@@ -298,7 +296,13 @@ def mute_words(input_file: str, output_file: str, words_to_mute: list, segments_
     
     if current_pos < duration:
         segments_to_keep.append((current_pos, duration))
-
+    
+    # Bounds checking: ensure all segment times are within audio duration
+    # Add small epsilon for floating-point precision issues
+    epsilon = 0.001
+    segments_to_keep = [(max(0, start), min(duration, end)) for start, end in segments_to_keep]
+    segments_to_keep = [(start, end) for start, end in segments_to_keep if end - start > epsilon]
+    
     if not segments_to_keep:
         print("All audio removed, creating silent file")
         try:
@@ -322,7 +326,6 @@ def mute_words(input_file: str, output_file: str, words_to_mute: list, segments_
                 segment_file = os.path.join(temp_dir, f"segment_{i}{file_ext}")
                 segment_files.append(segment_file)
                 duration_segment = end - start
-                
                 cmd = ['ffmpeg', '-y', '-i', input_file, '-ss', str(start), '-t', str(duration_segment), '-vn', '-c:a', 'copy', segment_file]
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 if result.returncode != 0:
