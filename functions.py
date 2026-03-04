@@ -394,6 +394,13 @@ def run_program(config_dict: dict, script_dir: Path) -> list | None:
     out_files = {f for f in os.listdir(output_path) if os.path.isfile(os.path.join(output_path, f)) and not f.startswith('.')}
     
     working_list = sorted(in_files - out_files)
+    for items in working_list:
+        file_number =+ 1
+
+    try:
+        print(f"Processing {file_number} files!")
+    except:
+        pass
     
     if not working_list:
         print("No files to update")
