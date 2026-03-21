@@ -7,6 +7,7 @@ import tempfile
 import time
 from collections import namedtuple
 from pathlib import Path
+import pickle
 
 import whisper_timestamped
 from detoxify import Detoxify
@@ -382,7 +383,8 @@ def run_program(config_dict: dict, script_dir: Path) -> list | None:
         config_dict["th"]
     ]
     
-    bad_words = read_json(str(script_dir / "swears.json")) or {"swears": []}
+    with open(str(script_dir / "bad_words.pkl"), 'rb') as file:
+        bad_words = pickle.load(file)
     
     global detox_model
     detox_model = Detoxify('original')

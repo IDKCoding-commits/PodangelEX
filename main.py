@@ -17,7 +17,7 @@ if __name__ == "__main__":
     main_loop = True
 
     while main_loop == True:
-        print("\n\nWelcome to PodAngel CLI! \nIf you want to reconfigure, type (1)\nYou can run the app with (2)")
+        print("\n\nWelcome to PodAngel CLI! \nIf you want to reconfigure, type (1)\nYou can run the app with (2)\nType (3) to exit")
         main_input = input("\n Input: ")
         normalized_input = main_input.lower().strip()
 
@@ -31,6 +31,6 @@ if __name__ == "__main__":
             print("Run menu reached")
 
 
-        elif normalized_input == "exit":
+        elif normalized_input == "3":
             main_loop = False
             quit()
